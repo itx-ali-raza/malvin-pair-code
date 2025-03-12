@@ -1,7 +1,6 @@
-
 services:
   - type: web
-    name: malvin-pair-code
+    name: MALVIN
     env: docker
-    region: Frankfurt
+    region: Nairobi
     plan: free
