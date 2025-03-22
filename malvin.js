@@ -1,22 +1,41 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
 const app = express();
-__path = process.cwd()
-const bodyParser = require("body-parser");
 const PORT = process.env.PORT || 8000;
-let code = require('./pair');
+
+// Import routes
+const qr = require('./qr');
+const code = require('./pair');
+
+// Prevent max listeners warning
 require('events').EventEmitter.defaultMaxListeners = 500;
-app.use('/code', code);
-app.use('/',async (req, res, next) => {
-res.sendFile(__path + '/pair.html')
-});
+
+// Middleware setup
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Define routes
+app.use('/qr', qr);
+app.use('/code', code);
+app.use('/pair', (req, res) => {
+    res.sendFile(path.join(__dirname, '/pair.html'));
+});
+app.use('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '/index.html'));
+});
+
+// Start the server
 app.listen(PORT, () => {
     console.log(`
-Deployment Successful!
+ALI XMD scanner online ✅
 
- Malvin-Session-Server Running on http://localhost:` + PORT)
-})
+MADE BY ALI 
 
-module.exports = app
-       
+Server running on http://localhost:${PORT}
+    `);
+});
+
+// Export the app instance
+module.exports = app;
+    
